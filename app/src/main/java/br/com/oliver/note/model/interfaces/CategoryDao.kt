@@ -1,10 +1,6 @@
 package br.com.oliver.note.model.interfaces
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import br.com.oliver.note.model.Category
 import kotlinx.coroutines.flow.Flow
 

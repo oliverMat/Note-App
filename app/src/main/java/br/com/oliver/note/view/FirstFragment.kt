@@ -23,7 +23,7 @@ class FirstFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
         return binding.root
@@ -41,5 +41,16 @@ class FirstFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private const val ARG = "table"
+        fun newInstance(nameTable: String?): FirstFragment {
+            val fragment = FirstFragment()
+            val args = Bundle()
+            args.putString(ARG, nameTable)
+            fragment.arguments = args
+            return fragment
+        }
     }
 }

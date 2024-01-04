@@ -1,26 +1,13 @@
 package br.com.oliver.note.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import br.com.oliver.note.model.Category
-import br.com.oliver.note.model.data.NoteRoomDatabase
 import br.com.oliver.note.model.repo.CategoryRepository
-import kotlinx.coroutines.CoroutineScope
 import androidx.lifecycle.*
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
-class CategoryViewModel (application: Application) : AndroidViewModel(application) {
-
-    private val repository : CategoryRepository
-    private val applicationScope = CoroutineScope(SupervisorJob())
-
-    init {
-        val dao = NoteRoomDatabase.getDatabase(application, applicationScope).getCategoryDao()
-        repository = CategoryRepository(dao)
-    }
+class CategoryViewModel(private val repository: CategoryRepository) : ViewModel() {
 
     fun insert(category: Category) = viewModelScope.launch {
         repository.insert(category)
@@ -35,4 +22,14 @@ class CategoryViewModel (application: Application) : AndroidViewModel(applicatio
     }
 
     val allCategory: LiveData<List<Category>> = repository.allCategory.asLiveData()
+}
+
+class CategoryViewModelFactory(private val repository: CategoryRepository) :
+    ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(CategoryViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST") return CategoryViewModel(repository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
 }
