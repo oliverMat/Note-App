@@ -1,5 +1,14 @@
 <resources>
     <string name="app_name">Note</string>
+
+    <string name="new_list">New list</string>
+    <string name="create_new_list">Create new list</string>
+    <string name="field_empty">Field empty</string>
+    <string name="enter_the_list_title">Enter the list title</string>
+    <string name="rename_list">Rename list</string>
+    <string name="delete_list">Delete list</string>
+
+
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>

@@ -6,16 +6,17 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
+import androidx.core.view.get
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import br.com.oliver.note.R
 import br.com.oliver.note.databinding.ActivityMainBinding
 import br.com.oliver.note.view.adapters.CategoryFragmentAdapter
 import br.com.oliver.note.Application
 import br.com.oliver.note.viewmodel.CategoryViewModel
 import br.com.oliver.note.viewmodel.CategoryViewModelFactory
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -24,9 +25,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
-    private val viewModal : CategoryViewModel by viewModels {
+    private val viewModel: CategoryViewModel by viewModels {
         CategoryViewModelFactory((application as Application).repository)
     }
+
+    private lateinit var nomeTable: String
+    private var position: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,51 +38,60 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        startComponent()
+        initComponent()
+        initOnClick()
         initViewPager()
     }
 
-    private fun startComponent() {
+    private fun initComponent() {
         val toolbar = binding.toolbar
         toolbar.title = ""
         setSupportActionBar(toolbar)
-
     }
 
-    override fun onStart() {
-        super.onStart()
+    private fun initOnClick() {
+        binding.fabAdd.setOnClickListener { view ->
+            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show()
+        }
+
+        binding.imgBtMenu.setOnClickListener {
+            val bottomSheet: MenuCategoryFragment =
+                MenuCategoryFragment.newInstance(nomeTable, viewModel)
+            bottomSheet.show(supportFragmentManager, MenuCategoryFragment.TAG)
+        }
     }
 
     private fun initViewPager() {
 
         val adapt = CategoryFragmentAdapter(this)
 
-        viewModal.allCategory.observe(this) {
+        viewModel.allCategory.observe(this) {
             adapt.addFragment(it)
 
             TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
                 tab.text = adapt.getPositionName(position)
 
             }.attach()
-//            binding.tabLayout.addTab(binding.tabLayout.newTab().setText(R.string.novaLista).setIcon(R.drawable.ic_round_add_24))
 
+            binding.tabLayout.addTab(binding.tabLayout.newTab().setText(R.string.new_list).setIcon(android.R.drawable.ic_input_add))
         }
 
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-//                nomeTable = tab.text.toString()
-//
-//                if (nomeTable == getString(R.string.novaLista)) {
-//
-//                    binding.tabLayout.selectTab(binding.tabLayout.getTabAt(position))
-//
-//                    val modalBottomSheet : BDFragmentInserir =
-//                        BDFragmentInserir.newInstance("")
-//                    modalBottomSheet.show(supportFragmentManager, BDFragmentInserir.TAG)
-//
-//                }else {
-//                    position = tab.position
-//                }
+                nomeTable = tab.text.toString()
+
+                binding.tabLayout.getTabAt(2)!!.view.isClickable = false
+                
+                if (nomeTable == getString(R.string.new_list)) {
+
+                    binding.tabLayout.selectTab(binding.tabLayout.getTabAt(position))
+
+                    goToInsert()
+
+                } else {
+                    position = tab.position
+                }
 
             }
 
@@ -110,5 +123,14 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
+    }
+
+
+    /******************* methods *******************/
+
+    private fun goToInsert() {
+        val bottomSheet: InsertCategoryFragment =
+            InsertCategoryFragment.newInstance("", viewModel)
+        bottomSheet.show(supportFragmentManager, InsertCategoryFragment.TAG)
     }
 }

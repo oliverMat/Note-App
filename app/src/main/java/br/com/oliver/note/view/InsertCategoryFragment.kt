@@ -16,23 +16,24 @@ import com.google.android.material.snackbar.Snackbar
 class InsertCategoryFragment(private val viewModel: CategoryViewModel) :
     BottomSheetDialogFragment() {
 
-    private lateinit var binding: FragmentCategoryInsertBinding
+    private var _binding: FragmentCategoryInsertBinding? = null
+    private val binding get() = _binding!!
 
-    private var nomeTable: String = ""
+    private var nameTable: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentCategoryInsertBinding.inflate(inflater, container, false)
+        _binding = FragmentCategoryInsertBinding.inflate(inflater, container, false)
 
         if (arguments != null) {
-            nomeTable = requireArguments().getString(TAG).toString()
+            nameTable = requireArguments().getString(TAG).toString()
         }
 
-        if (nomeTable.isNotEmpty()) {
-            binding.editTextAddTab.hint = nomeTable
+        if (nameTable.isNotEmpty()) {
+            binding.editTextAddTab.setText(nameTable)
         }
 
         initOnClick()
@@ -50,6 +51,13 @@ class InsertCategoryFragment(private val viewModel: CategoryViewModel) :
         coordinatorLayout.minimumHeight = Resources.getSystem().displayMetrics.heightPixels
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    /******************* methods *******************/
+
     private fun initOnClick() {
         binding.buttonCloseTab.setOnClickListener {
             dismiss()
@@ -64,8 +72,8 @@ class InsertCategoryFragment(private val viewModel: CategoryViewModel) :
 
         if (binding.editTextAddTab.text.trim().isNotEmpty()) {
 
-            if (nomeTable.isNotEmpty()) {
-                viewModel.rename(nomeTable, binding.editTextAddTab.text.toString())
+            if (nameTable.isNotEmpty()) {
+                viewModel.rename(nameTable, binding.editTextAddTab.text.toString())
             } else {
                 viewModel.insert(Category(binding.editTextAddTab.text.toString()))
             }
