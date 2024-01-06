@@ -21,12 +21,12 @@ class ListFragmentAdapter(activity: FragmentActivity) : FragmentStateAdapter(act
 
     fun getPositionName(position: Int): String = table[position].name
 
-    fun addFragment(category: kotlin.collections.List<ListModel>) {
+    fun addFragment(listModels: List<ListModel>) {
 
-        val callback = PagerDiffUtil(table, category)
+        val callback = PagerDiffUtil(table, listModels)
         val diff = DiffUtil.calculateDiff(callback)
         table.clear()
-        table.addAll(category)
+        table.addAll(listModels)
         diff.dispatchUpdatesTo(this)
 
     }
