@@ -4,29 +4,28 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import br.com.oliver.note.databinding.FragmentCategoryInsertBinding
-import br.com.oliver.note.databinding.FragmentCategoryMenuBinding
-import br.com.oliver.note.model.Category
-import br.com.oliver.note.viewmodel.CategoryViewModel
+import br.com.oliver.note.databinding.FragmentListMenuBinding
+import br.com.oliver.note.model.ListModel
+import br.com.oliver.note.viewmodel.ListViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class MenuCategoryFragment(private val viewModel: CategoryViewModel) :
+class MenuListFragment(private val viewModel: ListViewModel) :
     BottomSheetDialogFragment() {
 
-    private var _binding: FragmentCategoryMenuBinding? = null
+    private var _binding: FragmentListMenuBinding? = null
     private val binding get() = _binding!!
 
-    private var nomeTable: String = ""
+    private var nameList: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentCategoryMenuBinding.inflate(inflater, container, false)
+        _binding = FragmentListMenuBinding.inflate(inflater, container, false)
 
         if (arguments != null) {
-            nomeTable = requireArguments().getString(TAG).toString()
+            nameList = requireArguments().getString(TAG).toString()
         }
 
         binding.btRenameList.setOnClickListener {
@@ -35,7 +34,7 @@ class MenuCategoryFragment(private val viewModel: CategoryViewModel) :
         }
 
         binding.btDeleteList.setOnClickListener {
-            viewModel.delete(Category(nomeTable))
+            viewModel.delete(ListModel(nameList))
             dismiss()
         }
 
@@ -54,18 +53,18 @@ class MenuCategoryFragment(private val viewModel: CategoryViewModel) :
     /******************* methods *******************/
 
     private fun goToInsert() {
-        val bottomSheet: InsertCategoryFragment =
-            InsertCategoryFragment.newInstance(nomeTable, viewModel)
-        bottomSheet.show(requireActivity().supportFragmentManager, InsertCategoryFragment.TAG)
+        val bottomSheet: InsertListFragment =
+            InsertListFragment.newInstance(nameList, viewModel)
+        bottomSheet.show(requireActivity().supportFragmentManager, InsertListFragment.TAG)
     }
 
     companion object {
         const val TAG = "menuCategoryFragment"
 
-        fun newInstance(nameTable: String, viewModel: CategoryViewModel): MenuCategoryFragment {
-            val fragment = MenuCategoryFragment(viewModel)
+        fun newInstance(nameList: String, viewModel: ListViewModel): MenuListFragment {
+            val fragment = MenuListFragment(viewModel)
             val args = Bundle()
-            args.putString(TAG, nameTable)
+            args.putString(TAG, nameList)
             fragment.arguments = args
             return fragment
         }

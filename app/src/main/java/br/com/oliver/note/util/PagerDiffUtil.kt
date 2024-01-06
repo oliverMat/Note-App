@@ -1,24 +1,24 @@
 package br.com.oliver.note.util
 
 import androidx.recyclerview.widget.DiffUtil
-import br.com.oliver.note.model.Category
+import br.com.oliver.note.model.ListModel
 
-class PagerDiffUtil(private val oldList: List<Category>, private val newList: List<Category>) : DiffUtil.Callback() {
+class PagerDiffUtil(private val oldListModel: List<ListModel>, private val newListModel: List<ListModel>) : DiffUtil.Callback() {
 
     enum class PayloadKey {
         VALUE
     }
 
-    override fun getOldListSize() = oldList.size
+    override fun getOldListSize() = oldListModel.size
 
-    override fun getNewListSize() = newList.size
+    override fun getNewListSize() = newListModel.size
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldList[oldItemPosition] == newList[newItemPosition]
+        return oldListModel[oldItemPosition] == newListModel[newItemPosition]
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldList[oldItemPosition].name == newList[newItemPosition].name
+        return oldListModel[oldItemPosition].name == newListModel[newItemPosition].name
     }
 
     override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any {

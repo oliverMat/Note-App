@@ -5,16 +5,16 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import br.com.oliver.note.model.Category
-import br.com.oliver.note.model.interfaces.CategoryDao
+import br.com.oliver.note.model.ListModel
+import br.com.oliver.note.model.interfaces.ListDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Database(entities = [Category::class], version = 1)
+@Database(entities = [ListModel::class], version = 1)
 abstract class NoteRoomDatabase : RoomDatabase() {
 
-    abstract fun getCategoryDao(): CategoryDao
+    abstract fun getListDao(): ListDao
 
     companion object {
         @Volatile
@@ -41,25 +41,25 @@ abstract class NoteRoomDatabase : RoomDatabase() {
 
         private class NoteRoomDbCallback(
             private val scope: CoroutineScope
-        ) : RoomDatabase.Callback() {
+        ) : Callback() {
 
             override fun onCreate(db: SupportSQLiteDatabase) {
                 super.onCreate(db)
 
                 INSTANCE?.let { database ->
                     scope.launch(Dispatchers.IO) {
-                        populateDatabase(database.getCategoryDao())
+                        populateDatabase(database.getListDao())
                     }
                 }
             }
         }
 
-        suspend fun populateDatabase(categoryDao: CategoryDao) {
+        suspend fun populateDatabase(listDao: ListDao) {
             // Start the app with a clean database every time.
             // Not needed if you only populate on creation.
 
-            val category = Category("Note")
-            categoryDao.insert(category)
+            val listModel = ListModel("My tasks")
+            listDao.insert(listModel)
 
         }
     }

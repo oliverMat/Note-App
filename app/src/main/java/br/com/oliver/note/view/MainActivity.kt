@@ -6,16 +6,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
-import androidx.core.view.get
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import br.com.oliver.note.R
 import br.com.oliver.note.databinding.ActivityMainBinding
-import br.com.oliver.note.view.adapters.CategoryFragmentAdapter
+import br.com.oliver.note.view.adapters.ListFragmentAdapter
 import br.com.oliver.note.Application
-import br.com.oliver.note.viewmodel.CategoryViewModel
-import br.com.oliver.note.viewmodel.CategoryViewModelFactory
+import br.com.oliver.note.viewmodel.ListViewModel
+import br.com.oliver.note.viewmodel.ListViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -25,12 +24,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
-    private val viewModel: CategoryViewModel by viewModels {
-        CategoryViewModelFactory((application as Application).repository)
+    private val viewModel: ListViewModel by viewModels {
+        ListViewModelFactory((application as Application).repository)
     }
 
     private lateinit var nomeTable: String
-    private var position: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,43 +54,33 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.imgBtMenu.setOnClickListener {
-            val bottomSheet: MenuCategoryFragment =
-                MenuCategoryFragment.newInstance(nomeTable, viewModel)
-            bottomSheet.show(supportFragmentManager, MenuCategoryFragment.TAG)
+            val bottomSheet: MenuListFragment =
+                MenuListFragment.newInstance(nomeTable, viewModel)
+            bottomSheet.show(supportFragmentManager, MenuListFragment.TAG)
+        }
+
+        binding.btNewList.setOnClickListener {
+            goToInsert()
         }
     }
 
     private fun initViewPager() {
 
-        val adapt = CategoryFragmentAdapter(this)
+        val adapt = ListFragmentAdapter(this)
 
-        viewModel.allCategory.observe(this) {
+        viewModel.allLists.observe(this) {
             adapt.addFragment(it)
 
             TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
                 tab.text = adapt.getPositionName(position)
 
             }.attach()
-
-            binding.tabLayout.addTab(binding.tabLayout.newTab().setText(R.string.new_list).setIcon(android.R.drawable.ic_input_add))
         }
 
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 nomeTable = tab.text.toString()
-
-                binding.tabLayout.getTabAt(2)!!.view.isClickable = false
-                
-                if (nomeTable == getString(R.string.new_list)) {
-
-                    binding.tabLayout.selectTab(binding.tabLayout.getTabAt(position))
-
-                    goToInsert()
-
-                } else {
-                    position = tab.position
-                }
-
+                getString(R.string.new_list)
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {}
@@ -129,8 +117,8 @@ class MainActivity : AppCompatActivity() {
     /******************* methods *******************/
 
     private fun goToInsert() {
-        val bottomSheet: InsertCategoryFragment =
-            InsertCategoryFragment.newInstance("", viewModel)
-        bottomSheet.show(supportFragmentManager, InsertCategoryFragment.TAG)
+        val bottomSheet: InsertListFragment =
+            InsertListFragment.newInstance("", viewModel)
+        bottomSheet.show(supportFragmentManager, InsertListFragment.TAG)
     }
 }

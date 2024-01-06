@@ -6,34 +6,34 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import br.com.oliver.note.R
-import br.com.oliver.note.databinding.FragmentCategoryInsertBinding
-import br.com.oliver.note.model.Category
-import br.com.oliver.note.viewmodel.CategoryViewModel
+import br.com.oliver.note.databinding.FragmentListInsertBinding
+import br.com.oliver.note.model.ListModel
+import br.com.oliver.note.viewmodel.ListViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 
-class InsertCategoryFragment(private val viewModel: CategoryViewModel) :
+class InsertListFragment(private val viewModel: ListViewModel) :
     BottomSheetDialogFragment() {
 
-    private var _binding: FragmentCategoryInsertBinding? = null
+    private var _binding: FragmentListInsertBinding? = null
     private val binding get() = _binding!!
 
-    private var nameTable: String = ""
+    private var nameList: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentCategoryInsertBinding.inflate(inflater, container, false)
+        _binding = FragmentListInsertBinding.inflate(inflater, container, false)
 
         if (arguments != null) {
-            nameTable = requireArguments().getString(TAG).toString()
+            nameList = requireArguments().getString(TAG).toString()
         }
 
-        if (nameTable.isNotEmpty()) {
-            binding.editTextAddTab.setText(nameTable)
+        if (nameList.isNotEmpty()) {
+            binding.editTextAddTab.setText(nameList)
         }
 
         initOnClick()
@@ -72,10 +72,10 @@ class InsertCategoryFragment(private val viewModel: CategoryViewModel) :
 
         if (binding.editTextAddTab.text.trim().isNotEmpty()) {
 
-            if (nameTable.isNotEmpty()) {
-                viewModel.rename(nameTable, binding.editTextAddTab.text.toString())
+            if (nameList.isNotEmpty()) {
+                viewModel.rename(nameList, binding.editTextAddTab.text.toString())
             } else {
-                viewModel.insert(Category(binding.editTextAddTab.text.toString()))
+                viewModel.insert(ListModel(binding.editTextAddTab.text.toString()))
             }
 
             dismiss()
@@ -89,10 +89,10 @@ class InsertCategoryFragment(private val viewModel: CategoryViewModel) :
     companion object {
         const val TAG = "insertCategoryFragment"
 
-        fun newInstance(nameTable: String, viewModel: CategoryViewModel): InsertCategoryFragment {
-            val fragment = InsertCategoryFragment(viewModel)
+        fun newInstance(nameList: String, viewModel: ListViewModel): InsertListFragment {
+            val fragment = InsertListFragment(viewModel)
             val args = Bundle()
-            args.putString(TAG, nameTable)
+            args.putString(TAG, nameList)
             fragment.arguments = args
             return fragment
         }

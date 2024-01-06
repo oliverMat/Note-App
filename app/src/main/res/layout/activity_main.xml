@@ -27,22 +27,40 @@
 
         </com.google.android.material.appbar.MaterialToolbar>
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tab_layout"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/round_background_to_bottom"
-            android:contentDescription="@string/app_name"
-            app:tabIconTint="@color/gray"
-            app:tabIndicatorAnimationMode="elastic"
-            app:tabIndicatorColor="@color/red"
-            app:tabIndicatorFullWidth="false"
-            app:tabInlineLabel="true"
-            app:tabMode="scrollable"
-            app:tabSelectedTextColor="@color/White_ice"
-            app:tabTextColor="@color/gray">
+            android:orientation="horizontal">
 
-        </com.google.android.material.tabs.TabLayout>
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tab_layout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/round_background_to_bottom"
+                android:contentDescription="@string/app_name"
+                app:tabIconTint="@color/gray"
+                app:tabIndicatorAnimationMode="elastic"
+                app:tabIndicatorColor="@color/red"
+                app:tabIndicatorFullWidth="false"
+                app:tabInlineLabel="true"
+                app:tabMode="scrollable"
+                app:tabSelectedTextColor="@color/White_ice"
+                app:tabTextColor="@color/gray">
+
+            </com.google.android.material.tabs.TabLayout>
+
+            <ImageButton
+                android:id="@+id/btNewList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/black"
+                android:contentDescription="@string/app_name"
+                android:src="@android:drawable/ic_input_add"
+                app:tint="#FFFFFF" />
+
+        </LinearLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
