@@ -6,34 +6,34 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import br.com.oliver.note.R
-import br.com.oliver.note.databinding.FragmentListInsertBinding
+import br.com.oliver.note.databinding.FragmentListInsertOrUpdateBinding
 import br.com.oliver.note.model.ListModel
 import br.com.oliver.note.viewmodel.ListViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 
-class InsertListFragment(private val viewModel: ListViewModel) :
+class InsertOrUpdateListFragment(private val viewModel: ListViewModel) :
     BottomSheetDialogFragment() {
 
-    private var _binding: FragmentListInsertBinding? = null
+    private var _binding: FragmentListInsertOrUpdateBinding? = null
     private val binding get() = _binding!!
 
-    private var nameList: String = ""
+    private var model: ListModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentListInsertBinding.inflate(inflater, container, false)
+        _binding = FragmentListInsertOrUpdateBinding.inflate(inflater, container, false)
 
         if (arguments != null) {
-            nameList = requireArguments().getString(TAG).toString()
+            model = requireArguments().getSerializable(TAG) as ListModel?
         }
 
-        if (nameList.isNotEmpty()) {
-            binding.editTextAddTab.setText(nameList)
+        if (model != null) {
+            binding.editTextAddTab.setText(model!!.name)
         }
 
         initOnClick()
@@ -72,10 +72,20 @@ class InsertListFragment(private val viewModel: ListViewModel) :
 
         if (binding.editTextAddTab.text.trim().isNotEmpty()) {
 
-            if (nameList.isNotEmpty()) {
-                viewModel.rename(nameList, binding.editTextAddTab.text.toString())
-            } else {
-                viewModel.insert(ListModel(binding.editTextAddTab.text.toString()))
+            when (model != null) {
+                true -> {
+                    model!!.name = binding.editTextAddTab.text.toString()
+                    viewModel.update(model!!)
+                }
+
+                false -> {
+                    viewModel.insert(
+                        ListModel(
+                            name = binding.editTextAddTab.text.toString(),
+                            main = false
+                        )
+                    )
+                }
             }
 
             dismiss()
@@ -89,10 +99,13 @@ class InsertListFragment(private val viewModel: ListViewModel) :
     companion object {
         const val TAG = "insertCategoryFragment"
 
-        fun newInstance(nameList: String, viewModel: ListViewModel): InsertListFragment {
-            val fragment = InsertListFragment(viewModel)
+        fun newInstance(
+            listModel: ListModel?,
+            viewModel: ListViewModel
+        ): InsertOrUpdateListFragment {
+            val fragment = InsertOrUpdateListFragment(viewModel)
             val args = Bundle()
-            args.putString(TAG, nameList)
+            args.putSerializable(TAG, listModel)
             fragment.arguments = args
             return fragment
         }

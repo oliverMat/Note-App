@@ -10,6 +10,9 @@ interface ListDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(category: ListModel)
 
+    @Update
+    suspend fun update(category: ListModel)
+
     @Query("UPDATE or IGNORE listmodel SET name=:oldNome WHERE name=:newName")
     suspend fun rename(newName: String, oldNome: String)
 

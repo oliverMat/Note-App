@@ -58,7 +58,7 @@ abstract class NoteRoomDatabase : RoomDatabase() {
             // Start the app with a clean database every time.
             // Not needed if you only populate on creation.
 
-            val listModel = ListModel("My tasks")
+            val listModel = ListModel(name = "My tasks", main = true)
             listDao.insert(listModel)
 
         }

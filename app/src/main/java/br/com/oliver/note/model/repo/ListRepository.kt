@@ -13,6 +13,11 @@ class ListRepository(private val listDao: ListDao) {
     }
 
     @WorkerThread
+    suspend fun update(listModel: ListModel) {
+        listDao.update(listModel)
+    }
+
+    @WorkerThread
     suspend fun rename(oldName : String, newName: String) {
         listDao.rename(oldName, newName)
     }

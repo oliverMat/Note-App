@@ -13,6 +13,10 @@ class ListViewModel(private val repository: ListRepository) : ViewModel() {
         repository.insert(listModel)
     }
 
+    fun update(listModel: ListModel) = viewModelScope.launch {
+        repository.update(listModel)
+    }
+
     fun rename(oldName: String, newName: String) = viewModelScope.launch {
         repository.rename(oldName, newName)
     }

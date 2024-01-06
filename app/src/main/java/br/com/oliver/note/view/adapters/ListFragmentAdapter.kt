@@ -21,6 +21,8 @@ class ListFragmentAdapter(activity: FragmentActivity) : FragmentStateAdapter(act
 
     fun getPositionName(position: Int): String = table[position].name
 
+    fun getListModel(position: Int): ListModel = table[position]
+
     fun addFragment(listModels: List<ListModel>) {
 
         val callback = PagerDiffUtil(table, listModels)
