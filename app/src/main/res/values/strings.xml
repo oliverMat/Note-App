@@ -8,6 +8,9 @@
     <string name="rename_list">Rename list</string>
     <string name="delete_list">Delete list</string>
 
+    <string name="new_task">New task</string>
+
+
 
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->

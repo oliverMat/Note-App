@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".view.InsertOrUpdateTaskFragment">
+
+    <EditText
+        android:id="@+id/eTAddTask"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="10dp"
+        android:autofillHints=""
+        android:background="@null"
+        android:ems="10"
+        android:hint="@string/new_task"
+        android:inputType="textPersonName"
+        android:textColor="@color/White_ice"
+        android:textColorHint="@color/gray" />
+
+    <Button
+        android:id="@+id/btSaveTask"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Button" />
+
+</LinearLayout>

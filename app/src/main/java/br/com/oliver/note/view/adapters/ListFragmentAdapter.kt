@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import br.com.oliver.note.model.ListModel
 import br.com.oliver.note.util.PagerDiffUtil
-import br.com.oliver.note.view.FirstFragment
+import br.com.oliver.note.view.TaskFragment
 
 class ListFragmentAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
 
@@ -15,8 +15,8 @@ class ListFragmentAdapter(activity: FragmentActivity) : FragmentStateAdapter(act
     override fun getItemCount(): Int = table.size
 
     override fun createFragment(position: Int): Fragment {
-        val listModelTable: ListModel = table[position]
-        return FirstFragment.newInstance(listModelTable.name)
+        val listModel: ListModel = table[position]
+        return TaskFragment.newInstance(listModel)
     }
 
     fun getPositionName(position: Int): String = table[position].name

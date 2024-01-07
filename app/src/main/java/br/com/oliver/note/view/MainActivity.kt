@@ -16,7 +16,8 @@ import br.com.oliver.note.Application
 import br.com.oliver.note.model.ListModel
 import br.com.oliver.note.viewmodel.ListViewModel
 import br.com.oliver.note.viewmodel.ListViewModelFactory
-import com.google.android.material.snackbar.Snackbar
+import br.com.oliver.note.viewmodel.TaskViewModel
+import br.com.oliver.note.viewmodel.TaskViewModelFactory
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -25,8 +26,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
-    private val viewModel: ListViewModel by viewModels {
-        ListViewModelFactory((application as Application).repository)
+    private val listViewModel: ListViewModel by viewModels {
+        ListViewModelFactory((application as Application).listRepository)
+    }
+
+    private val taskViewModel: TaskViewModel by viewModels {
+        TaskViewModelFactory((application as Application).taskRepository)
     }
 
     private lateinit var listModel: ListModel
@@ -74,9 +79,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initOnClick() {
-        binding.fabAdd.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+        binding.fabAdd.setOnClickListener {
+            goToTask()
         }
 
         binding.imgBtMenu.setOnClickListener {
@@ -92,7 +96,7 @@ class MainActivity : AppCompatActivity() {
 
         val adapt = ListFragmentAdapter(this)
 
-        viewModel.allLists.observe(this) {
+        listViewModel.allLists.observe(this) {
             adapt.addFragment(it)
 
             TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
@@ -117,13 +121,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun goToInsert() {
         val bottomSheet: InsertOrUpdateListFragment =
-            InsertOrUpdateListFragment.newInstance(null, viewModel)
+            InsertOrUpdateListFragment.newInstance(null, listViewModel)
         bottomSheet.show(supportFragmentManager, InsertOrUpdateListFragment.TAG)
     }
 
     private fun goToMenuList() {
         val bottomSheet: MenuListFragment =
-            MenuListFragment.newInstance(listModel, viewModel)
+            MenuListFragment.newInstance(listModel, listViewModel)
         bottomSheet.show(supportFragmentManager, MenuListFragment.TAG)
+    }
+
+    private fun goToTask() {
+        val bottomSheet: InsertOrUpdateTaskFragment =
+            InsertOrUpdateTaskFragment.newInstance(listModel, taskViewModel)
+        bottomSheet.show(supportFragmentManager, InsertOrUpdateTaskFragment.TAG)
     }
 }

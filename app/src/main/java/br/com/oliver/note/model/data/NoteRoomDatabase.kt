@@ -6,15 +6,18 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import br.com.oliver.note.model.ListModel
+import br.com.oliver.note.model.TaskModel
 import br.com.oliver.note.model.interfaces.ListDao
+import br.com.oliver.note.model.interfaces.TaskDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Database(entities = [ListModel::class], version = 1)
+@Database(entities = [ListModel::class, TaskModel::class], version = 1)
 abstract class NoteRoomDatabase : RoomDatabase() {
 
     abstract fun getListDao(): ListDao
+    abstract fun getTaskDao(): TaskDao
 
     companion object {
         @Volatile
