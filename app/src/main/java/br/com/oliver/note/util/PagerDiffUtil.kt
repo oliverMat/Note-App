@@ -18,7 +18,7 @@ class PagerDiffUtil(private val oldListModel: List<ListModel>, private val newLi
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldListModel[oldItemPosition].name == newListModel[newItemPosition].name
+        return oldListModel[oldItemPosition].id == newListModel[newItemPosition].id
     }
 
     override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any {
