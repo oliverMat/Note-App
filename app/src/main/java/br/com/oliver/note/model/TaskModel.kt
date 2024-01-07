@@ -8,5 +8,7 @@ import java.io.Serializable
 @Entity
 data class TaskModel(
     @PrimaryKey val id: String = GeneratorId().uuid(),
-    var title: String
+    var title: String,
+    var details: String,
+    var listId: String
 ) : Serializable

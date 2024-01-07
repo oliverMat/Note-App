@@ -23,7 +23,7 @@ class TaskListAdapter : ListAdapter<TaskModel, TaskViewHolder>(TASK_COMPARATOR) 
     class TaskViewHolder(private val binding: ItemTaskRecyclerBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(get: TaskModel) {
-            binding.email.text = get.title
+            binding.email.text = get.details
             binding.name.text = get.title
 
         }

@@ -18,12 +18,9 @@ interface TaskDao {
     @Update
     suspend fun update(taskModel: TaskModel)
 
-    @Query("UPDATE or IGNORE taskmodel SET title=:oldNome WHERE title=:newName")
-    suspend fun rename(newName: String, oldNome: String)
-
     @Delete
     suspend fun delete(taskModel: TaskModel)
 
-    @Query("SELECT * FROM TaskModel")
-    fun getTask(): Flow<List<TaskModel>>
+    @Query("SELECT * FROM TaskModel WHERE listId=:id")
+    fun getTaskById(id : String): Flow<List<TaskModel>>
 }

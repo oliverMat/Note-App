@@ -15,12 +15,18 @@ class InsertOrUpdateTaskFragment(private val taskViewModel: TaskViewModel) : Bot
     private var _binding: FragmentTaskInsertOrUpdateBinding? = null
     private val binding get() = _binding!!
 
+    private var model: ListModel? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentTaskInsertOrUpdateBinding.inflate(inflater, container, false)
+
+        if (arguments != null) {
+            model = requireArguments().getSerializable(TAG) as ListModel?
+        }
 
         initOnClick()
         return binding.root
@@ -39,8 +45,14 @@ class InsertOrUpdateTaskFragment(private val taskViewModel: TaskViewModel) : Bot
 
     private fun initOnClick() {
         binding.btSaveTask.setOnClickListener {
-
-            taskViewModel.insert(TaskModel(title = binding.eTAddTask.text.toString()))
+            taskViewModel.insert(
+                TaskModel(
+                    title = binding.eTAddTask.text.toString(),
+                    details = binding.eTAddDetails.text.toString(),
+                    listId = model!!.id
+                )
+            )
+            dismiss()
         }
     }
 

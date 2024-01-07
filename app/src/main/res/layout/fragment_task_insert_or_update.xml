@@ -19,10 +19,26 @@
         android:textColor="@color/White_ice"
         android:textColorHint="@color/gray" />
 
+    <EditText
+        android:id="@+id/eTAddDetails"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_margin="10dp"
+        android:autofillHints=""
+        android:background="@null"
+        android:ems="10"
+        android:gravity="top"
+        android:hint="@string/add_details"
+        android:inputType="textMultiLine"
+        android:textColor="@color/White_ice"
+        android:textColorHint="@color/gray" />
+
     <Button
         android:id="@+id/btSaveTask"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Button" />
+
+
 
 </LinearLayout>

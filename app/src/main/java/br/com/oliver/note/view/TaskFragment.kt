@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.oliver.note.Application
 import br.com.oliver.note.databinding.FragmentTaskBinding
 import br.com.oliver.note.model.ListModel
@@ -61,7 +60,7 @@ class TaskFragment : Fragment() {
         val adapter = TaskListAdapter()
         binding.recyclerViewTask.adapter = adapter
 
-        taskViewModel.allTask.observe(requireActivity()) { task ->
+        taskViewModel.allTaskById(model!!.id).observe(requireActivity()) { task ->
             adapter.submitList(task)
         }
     }

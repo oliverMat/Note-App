@@ -18,15 +18,10 @@ class TaskRepository(private val taskDao: TaskDao) {
     }
 
     @WorkerThread
-    suspend fun rename(oldName : String, newName: String) {
-        taskDao.rename(oldName, newName)
-    }
-
-    @WorkerThread
     suspend fun delete(taskModel: TaskModel) {
         taskDao.delete(taskModel)
     }
 
-    val allTaskModel: Flow<List<TaskModel>> = taskDao.getTask()
+    fun allTaskModelById(id: String): Flow<List<TaskModel>> = taskDao.getTaskById(id)
 
 }

@@ -19,15 +19,11 @@ class TaskViewModel(private val taskRepository: TaskRepository) : ViewModel() {
         taskRepository.update(taskModel)
     }
 
-    fun rename(oldName: String, newName: String) = viewModelScope.launch {
-        taskRepository.rename(oldName, newName)
-    }
-
     fun delete(taskModel: TaskModel) = viewModelScope.launch {
         taskRepository.delete(taskModel)
     }
 
-    val allTask: LiveData<List<TaskModel>> = taskRepository.allTaskModel.asLiveData()
+    fun allTaskById(id: String): LiveData<List<TaskModel>> = taskRepository.allTaskModelById(id).asLiveData()
 }
 
 class TaskViewModelFactory(private val repository: TaskRepository) :
