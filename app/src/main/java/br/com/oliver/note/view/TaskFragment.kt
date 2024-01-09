@@ -56,11 +56,21 @@ class TaskFragment : Fragment() {
         val gridLayoutManager = GridLayoutManager(activity, 2)
         gridLayoutManager.spanCount = 2
 
-        binding.recyclerViewTask.layoutManager = gridLayoutManager
+        binding.layoutRecyclerview.recyclerViewLayout.layoutManager = gridLayoutManager
         val adapter = TaskListAdapter()
-        binding.recyclerViewTask.adapter = adapter
+        binding.layoutRecyclerview.recyclerViewLayout.adapter = adapter
+
+
 
         taskViewModel.allTaskById(model!!.id).observe(requireActivity()) { task ->
+            when (task.isEmpty()) {
+                true -> binding.viewFlipperTask.showNext()
+                else -> {
+                    if (binding.viewFlipperTask.displayedChild == LAYOUT_EMPTY) {
+                        binding.viewFlipperTask.showNext()
+                    }
+                }
+            }
             adapter.submitList(task)
         }
     }
@@ -68,6 +78,7 @@ class TaskFragment : Fragment() {
 
     companion object {
         private const val TAG = "taskFragment"
+        private const val LAYOUT_EMPTY = 1
         fun newInstance(listModel: ListModel): TaskFragment {
             val fragment = TaskFragment()
             val args = Bundle()
