@@ -69,30 +69,29 @@ class InsertOrUpdateListFragment(private val viewModel: ListViewModel) :
     }
 
     private fun addTabBottomSheet() {
+        when (binding.editTextAddTab.text.trim().isNotEmpty()) {
+            true -> {
+                when (model != null) {
+                    true -> {
+                        model!!.name = binding.editTextAddTab.text.toString()
+                        viewModel.update(model!!)
+                    }
 
-        if (binding.editTextAddTab.text.trim().isNotEmpty()) {
-
-            when (model != null) {
-                true -> {
-                    model!!.name = binding.editTextAddTab.text.toString()
-                    viewModel.update(model!!)
-                }
-
-                false -> {
-                    viewModel.insert(
-                        ListModel(
-                            name = binding.editTextAddTab.text.toString(),
-                            main = false
+                    false -> {
+                        viewModel.insert(
+                            ListModel(
+                                name = binding.editTextAddTab.text.toString(),
+                                main = false
+                            )
                         )
-                    )
+                    }
                 }
+                dismiss()
             }
-
-            dismiss()
-
-        } else {
-            Snackbar.make(binding.root, R.string.field_empty, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+            false -> {
+                Snackbar.make(binding.root, R.string.field_empty, Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show()
+            }
         }
     }
 

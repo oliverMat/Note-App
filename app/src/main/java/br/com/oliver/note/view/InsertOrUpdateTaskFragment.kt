@@ -4,13 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import br.com.oliver.note.R
 import br.com.oliver.note.databinding.FragmentTaskInsertOrUpdateBinding
 import br.com.oliver.note.model.ListModel
 import br.com.oliver.note.model.TaskModel
 import br.com.oliver.note.viewmodel.TaskViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.snackbar.Snackbar
 
-class InsertOrUpdateTaskFragment(private val taskViewModel: TaskViewModel) : BottomSheetDialogFragment() {
+class InsertOrUpdateTaskFragment(private val taskViewModel: TaskViewModel) :
+    BottomSheetDialogFragment() {
 
     private var _binding: FragmentTaskInsertOrUpdateBinding? = null
     private val binding get() = _binding!!
@@ -45,14 +48,26 @@ class InsertOrUpdateTaskFragment(private val taskViewModel: TaskViewModel) : Bot
 
     private fun initOnClick() {
         binding.btSaveTask.setOnClickListener {
-            taskViewModel.insert(
-                TaskModel(
-                    title = binding.eTAddTask.text.toString(),
-                    details = binding.eTAddDetails.text.toString(),
-                    listId = model!!.id
+            addNewTask()
+        }
+    }
+
+    private fun addNewTask() {
+        when (binding.eTAddTask.text.trim().isNotEmpty()) {
+            true -> {
+                taskViewModel.insert(
+                    TaskModel(
+                        title = binding.eTAddTask.text.toString(),
+                        details = binding.eTAddDetails.text.toString(),
+                        listId = model!!.id
+                    )
                 )
-            )
-            dismiss()
+                dismiss()
+            }
+            false -> {
+                Snackbar.make(binding.root, R.string.field_empty, Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show()
+            }
         }
     }
 
