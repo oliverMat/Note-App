@@ -11,6 +11,10 @@
     <string name="new_task">New task</string>
     <string name="add_details">Add details</string>
 
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete_this_list">Delete this list?</string>
+    <string name="permanently_deleted_message">All tasks in this list will be permanently deleted</string>
 
 
     <string name="action_settings">Settings</string>

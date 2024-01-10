@@ -21,6 +21,12 @@ interface TaskDao {
     @Delete
     suspend fun delete(taskModel: TaskModel)
 
+    @Query("DELETE FROM TaskModel WHERE listId=:listId")
+    suspend fun deleteByListId(listId: String)
+
     @Query("SELECT * FROM TaskModel WHERE listId=:id")
-    fun getTaskById(id : String): Flow<List<TaskModel>>
+    fun getTaskById(id: String): Flow<List<TaskModel>>
+
+    @Query("SELECT EXISTS (SELECT 1 FROM TaskModel WHERE id=:listId)")
+    fun existsListId(listId: String): Boolean
 }

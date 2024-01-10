@@ -4,12 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import br.com.oliver.note.R
 import br.com.oliver.note.databinding.FragmentListMenuBinding
 import br.com.oliver.note.model.ListModel
 import br.com.oliver.note.viewmodel.ListViewModel
+import br.com.oliver.note.viewmodel.TaskViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.runBlocking
 
-class MenuListFragment(private val viewModel: ListViewModel) :
+class MenuListFragment(
+    private val listViewModel: ListViewModel,
+    private val taskViewModel: TaskViewModel
+) :
     BottomSheetDialogFragment() {
 
     private var _binding: FragmentListMenuBinding? = null
@@ -52,8 +59,15 @@ class MenuListFragment(private val viewModel: ListViewModel) :
         }
 
         binding.btDeleteList.setOnClickListener {
-            viewModel.delete(model)
-            dismiss()
+
+            runBlocking {
+                if (taskViewModel.existsListId(model.id).await()) {
+                    showAlertDialog()
+                    dismiss()
+                } else {
+                    listViewModel.delete(model)
+                }
+            }
         }
     }
 
@@ -66,16 +80,39 @@ class MenuListFragment(private val viewModel: ListViewModel) :
 
     private fun goToInsert() {
         val bottomSheet: InsertOrUpdateListFragment =
-            InsertOrUpdateListFragment.newInstance(model, viewModel)
+            InsertOrUpdateListFragment.newInstance(model, listViewModel)
         bottomSheet.show(requireActivity().supportFragmentManager, InsertOrUpdateListFragment.TAG)
+    }
+
+    private fun showAlertDialog() {
+        MaterialAlertDialogBuilder(requireActivity())
+            .setTitle(R.string.delete_this_list)
+            .setMessage(R.string.permanently_deleted_message)
+            .setOnDismissListener {
+            }
+            .setPositiveButton(R.string.delete) { dialog, _ ->
+                taskViewModel.deleteByListId(model.id)
+                listViewModel.delete(model)
+                dialog.dismiss()
+            }
+            .setNegativeButton(R.string.cancel) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create().apply {
+                show()
+            }
     }
 
     companion object {
         const val TAG = "menuCategoryFragment"
         const val ALPHA_NUM = 0.3F
 
-        fun newInstance(listModel: ListModel, viewModel: ListViewModel): MenuListFragment {
-            val fragment = MenuListFragment(viewModel)
+        fun newInstance(
+            listModel: ListModel,
+            listViewModel: ListViewModel,
+            taskViewModel: TaskViewModel
+        ): MenuListFragment {
+            val fragment = MenuListFragment(listViewModel, taskViewModel)
             val args = Bundle()
             args.putSerializable(TAG, listModel)
             fragment.arguments = args

@@ -127,7 +127,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun goToMenuList() {
         val bottomSheet: MenuListFragment =
-            MenuListFragment.newInstance(listModel, listViewModel)
+            MenuListFragment.newInstance(listModel, listViewModel, taskViewModel)
         bottomSheet.show(supportFragmentManager, MenuListFragment.TAG)
     }
 

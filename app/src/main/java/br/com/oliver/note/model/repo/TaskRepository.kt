@@ -22,6 +22,16 @@ class TaskRepository(private val taskDao: TaskDao) {
         taskDao.delete(taskModel)
     }
 
+    @WorkerThread
+    suspend fun deleteByListId(listId: String) {
+        taskDao.deleteByListId(listId)
+    }
+
     fun allTaskModelById(id: String): Flow<List<TaskModel>> = taskDao.getTaskById(id)
+
+    @WorkerThread
+    suspend fun existsListId(listId: String): Boolean {
+        return taskDao.existsListId(listId)
+    }
 
 }
