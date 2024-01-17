@@ -11,7 +11,6 @@ import br.com.oliver.note.viewmodel.ListViewModel
 import br.com.oliver.note.viewmodel.TaskViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.runBlocking
 
 class MenuListFragment(
     private val listViewModel: ListViewModel,
@@ -59,13 +58,13 @@ class MenuListFragment(
         }
 
         binding.btDeleteList.setOnClickListener {
-
-            runBlocking {
-                if (taskViewModel.existsListId(model.id).await()) {
+            taskViewModel.existsListId(model.id).observe(this) {
+                if (it) {
                     showAlertDialog()
                     dismiss()
                 } else {
                     listViewModel.delete(model)
+                    dismiss()
                 }
             }
         }

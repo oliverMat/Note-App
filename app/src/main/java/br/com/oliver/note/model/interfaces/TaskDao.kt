@@ -27,6 +27,6 @@ interface TaskDao {
     @Query("SELECT * FROM TaskModel WHERE listId=:id")
     fun getTaskById(id: String): Flow<List<TaskModel>>
 
-    @Query("SELECT EXISTS (SELECT 1 FROM TaskModel WHERE id=:listId)")
-    fun existsListId(listId: String): Boolean
+    @Query("SELECT EXISTS (SELECT 1 FROM TaskModel WHERE listId=:listId)")
+    fun existsListId(listId: String): Flow<Boolean>
 }

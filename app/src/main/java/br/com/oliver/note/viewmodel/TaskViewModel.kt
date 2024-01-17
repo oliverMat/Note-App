@@ -32,9 +32,7 @@ class TaskViewModel(private val taskRepository: TaskRepository) : ViewModel() {
     fun allTaskById(id: String): LiveData<List<TaskModel>> =
         taskRepository.allTaskModelById(id).asLiveData()
 
-    fun existsListId(listId: String): Deferred<Boolean> = viewModelScope.async {
-        return@async taskRepository.existsListId(listId)
-    }
+    fun existsListId(listId: String): LiveData<Boolean> = taskRepository.existsListId(listId).asLiveData()
 }
 
 class TaskViewModelFactory(private val repository: TaskRepository) :

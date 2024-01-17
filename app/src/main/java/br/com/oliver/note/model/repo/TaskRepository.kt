@@ -29,8 +29,7 @@ class TaskRepository(private val taskDao: TaskDao) {
 
     fun allTaskModelById(id: String): Flow<List<TaskModel>> = taskDao.getTaskById(id)
 
-    @WorkerThread
-    suspend fun existsListId(listId: String): Boolean {
+    fun existsListId(listId: String): Flow<Boolean> {
         return taskDao.existsListId(listId)
     }
 
